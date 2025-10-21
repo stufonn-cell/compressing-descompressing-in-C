@@ -4,10 +4,6 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 typedef enum {
     BWT_STATUS_OK = 0,
     BWT_STATUS_INVALID_ARGUMENT = -1,
@@ -40,9 +36,5 @@ bwt_status_t bwt_forward_stream(const bwt_config_t *cfg,
 bwt_status_t bwt_inverse_stream(const bwt_config_t *cfg,
                                 bwt_read_block_cb reader, void *reader_ctx,
                                 bwt_write_cb writer, void *writer_ctx);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif
