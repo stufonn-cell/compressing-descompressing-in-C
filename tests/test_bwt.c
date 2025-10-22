@@ -13,6 +13,7 @@ static void test_roundtrip_literal(const uint8_t *data, size_t len) {
 
     size_t primary = SIZE_MAX;
     assert(bwt_forward(data, len, encoded, &primary) == BWT_STATUS_OK);
+    printf("Encoded value: %s\n", encoded);
     assert(primary < len || len == 0);
     assert(bwt_inverse(encoded, len, primary, decoded) == BWT_STATUS_OK);
     assert(memcmp(decoded, data, len) == 0);
