@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <omp.h>
-#include <stdint.h> // ensure explicit byte (uint8_t) type is available
-#include <stdio.h>  // added to support binary FILE I/O
+#include <stdint.h> /
+#include <stdio.h>  // binary file I/O
 
 typedef struct {
     size_t index;
