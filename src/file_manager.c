@@ -63,7 +63,7 @@ static fm_status_t compress_single_file(FILE *in, FILE *out, const char *filenam
         free(output);
         return FM_STATUS_ERROR;
     }
-    // Escribir metadatos: [filename_len][filename][data_len][primary_index][data]
+    
     uint64_t filename_len = strlen(filename);
     uint64_t data_len = (uint64_t)file_size;
     uint64_t prim_idx = (uint64_t)primary_index;
