@@ -18,13 +18,13 @@ typedef enum {
     FM_TYPE_DIRECTORY
 } fm_path_type_t;
 
-// Detecta si la ruta es un archivo o directorio
+// Detects whether the path is a file or directory
 fm_path_type_t fm_get_path_type(const char *path);
 
-// Comprime un archivo o directorio y guarda resultado en .w
+// Compresses a file or directory and stores the result in a .w file
 fm_status_t fm_compress(const char *input_path, const char *output_path);
 
-// Descomprime un archivo .w
+// Decompresses a .w file
 fm_status_t fm_decompress(const char *input_path, const char *output_path);
 
 #endif // FILE_MANAGER_H

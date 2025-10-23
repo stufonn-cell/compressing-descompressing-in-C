@@ -12,7 +12,7 @@
 #define MAX_PATH 4096
 #define BUFFER_SIZE (1024 * 1024) // 1 MiB
 
-// Estructura para metadatos de archivos en el contenedor .w
+// Structure for file metadata in the .w container
 typedef struct {
     uint64_t filename_len;
     uint64_t data_len;
@@ -22,18 +22,18 @@ typedef struct {
 fm_path_type_t fm_get_path_type(const char *path) {
     struct stat statbuf;
     if (stat(path, &statbuf) != 0) {
-        return FM_TYPE_FILE; // Por defecto, tratar como archivo
+        return FM_TYPE_FILE; // By default, treat as file
     }
     return S_ISDIR(statbuf.st_mode) ? FM_TYPE_DIRECTORY : FM_TYPE_FILE;
 }
 
-// Comprime un archivo individual con BWT
+// Compresses an individual file using BWT
 static fm_status_t compress_single_file(FILE *in, FILE *out, const char *filename) {
     if (!in || !out || !filename) {
         return FM_STATUS_INVALID_ARGUMENT;
     }
 
-    // Leer archivo completo
+    // Read entire file
     fseek(in, 0, SEEK_END);
     long file_size = ftell(in);
     fseek(in, 0, SEEK_SET);
@@ -82,7 +82,7 @@ static fm_status_t compress_single_file(FILE *in, FILE *out, const char *filenam
     return FM_STATUS_OK;
 }
 
-// Procesa recursivamente un directorio
+// Recursively processes a directory
 static fm_status_t compress_directory_recursive(const char *dir_path, FILE *out, const char *base_path) {
     DIR *dir = opendir(dir_path);
     if (!dir) {
@@ -104,20 +104,20 @@ static fm_status_t compress_directory_recursive(const char *dir_path, FILE *out,
         }
 
         if (S_ISDIR(statbuf.st_mode)) {
-            // Recursivamente procesar subdirectorio
+            // Recursively process subdirectory
             fm_status_t status = compress_directory_recursive(full_path, out, base_path);
             if (status != FM_STATUS_OK) {
                 closedir(dir);
                 return status;
             }
         } else if (S_ISREG(statbuf.st_mode)) {
-            // Comprimir archivo con ruta relativa
+            // Compress file with relative path
             FILE *in = fopen(full_path, "rb");
             if (!in) {
                 continue;
             }
 
-            // Calcular ruta relativa
+            // Calculate relative path
             char relative_path[MAX_PATH];
             if (strlen(full_path) > strlen(base_path) + 1) {
                 strcpy(relative_path, full_path + strlen(base_path) + 1);
@@ -168,7 +168,7 @@ fm_status_t fm_compress(const char *input_path, const char *output_path) {
     return status;
 }
 
-// Crea directorios necesarios
+// Create necessary directories
 static fm_status_t create_directories(const char *filepath) {
     if (!filepath || filepath[0] == '\0') {
         return FM_STATUS_OK;
@@ -182,7 +182,7 @@ static fm_status_t create_directories(const char *filepath) {
     strcpy(path, filepath);
     char *dir = dirname(path);
 
-    // Crear directorios recursivamente
+    // Create directories recursively
     char temp[MAX_PATH];
     strcpy(temp, dir);
 
@@ -199,7 +199,7 @@ static fm_status_t create_directories(const char *filepath) {
     return FM_STATUS_OK;
 }
 
-// Descomprime archivo .w
+// Decompress .w file
 fm_status_t fm_decompress(const char *input_path, const char *output_path) {
     if (!input_path || !output_path) {
         return FM_STATUS_INVALID_ARGUMENT;
@@ -212,7 +212,7 @@ fm_status_t fm_decompress(const char *input_path, const char *output_path) {
 
     fm_status_t status = FM_STATUS_OK;
 
-    // Crear directorio base de salida si no existe
+    // Create base output directory if it does not exist
     mkdir(output_path, 0755);
 
     while (1) {
@@ -272,14 +272,14 @@ fm_status_t fm_decompress(const char *input_path, const char *output_path) {
             break;
         }
 
-        // Construir ruta completa
+        // Construct full path
         char full_output_path[MAX_PATH];
         snprintf(full_output_path, sizeof(full_output_path), "%s/%s", output_path, filename);
 
-        // Crear directorios necesarios
+        // Create necessary directories
         create_directories(full_output_path);
 
-        // Escribir archivo
+        // Write file
         FILE *out = fopen(full_output_path, "wb");
         if (!out) {
             free(filename);
