@@ -111,7 +111,6 @@ static bwt_status_t bwt_forward_core(const uint8_t *input, size_t length,
     if (primary_index) {
         *primary_index = primary;
     }
-    printf("Output value: %s\n", output);
     
     return BWT_STATUS_OK;
 }
