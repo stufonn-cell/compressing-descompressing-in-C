@@ -1,6 +1,8 @@
-# File Compression/Decompression Tool
+# Compresión y descompresión de archivos en C (con OpenMP)
 
-Herramienta de compresión y descompresión de archivos usando BWT + RLE con paralelización OpenMP e interfaz gráfica GTK.
+Proyecto de ejemplo para comprimir y descomprimir archivos usando el lenguaje C. El proyecto aprovecha OpenMP para paralelizar las partes del algoritmo que pueden beneficiarse de ejecución concurrente en máquinas multi‑núcleo.
+
+El objetivo principal es proporcionar una implementación eficiente de compresión/descompresión, mostrando cómo integrar paralelismo mediante OpenMP, mostrando mejoras de rendimiento y aprovechamiento a nivel de procesamiento computacional.
 
 ## Miembros del equipo
 
@@ -11,19 +13,22 @@ Herramienta de compresión y descompresión de archivos usando BWT + RLE con par
 
 ## Características
 
-- Algoritmos: Burrows-Wheeler Transform (BWT) + Run-Length Encoding (RLE)
-- Paralelización con OpenMP
-- Interfaz gráfica GTK3
-- Línea de comandos CLI
-- Soporte para archivos individuales y directorios completos
+- Implementación en C
+- Soporte para paralelismo con OpenMP.
+- Herramientas para medir tiempo y velocidad de compresión/descompresión.
 
 ## Requisitos
 
-- GCC con soporte OpenMP
-- GTK+ 3.0
-- pkg-config
+- Compilador GCC
+- Entorno Linux / POSIX.
+
+Recomendado:
+
+- gcc >= 5.0 (con `-fopenmp`).
+- OMP_NUM_THREADS ajustable según el número de núcleos disponibles.
 
 ## Compilación
+A continuación se muestra como se debería compilar el proyecto:
 
 ```bash
 make
