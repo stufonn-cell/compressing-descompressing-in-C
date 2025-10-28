@@ -1,8 +1,6 @@
-# Compresión y descompresión de archivos en C (con OpenMP)
+# File Compression/Decompression Tool
 
-Proyecto de ejemplo para comprimir y descomprimir archivos usando el lenguaje C. El proyecto aprovecha OpenMP para paralelizar las partes del algoritmo que pueden beneficiarse de ejecución concurrente en máquinas multi‑núcleo.
-
-El objetivo principal es proporcionar una implementación eficiente de compresión/descompresión, mostrando cómo integrar paralelismo mediante OpenMP, mostrando mejoras de rendimiento y aprovechamiento a nivel de procesamiento computacional.
+Herramienta de compresión y descompresión de archivos usando BWT + RLE con paralelización OpenMP e interfaz gráfica GTK.
 
 ## Miembros del equipo
 
@@ -13,41 +11,46 @@ El objetivo principal es proporcionar una implementación eficiente de compresi�
 
 ## Características
 
-- Implementación en C
-- Soporte para paralelismo con OpenMP.
-- Herramientas para medir tiempo y velocidad de compresión/descompresión.
+- Algoritmos: Burrows-Wheeler Transform (BWT) + Run-Length Encoding (RLE)
+- Paralelización con OpenMP
+- Interfaz gráfica GTK3
+- Línea de comandos CLI
+- Soporte para archivos individuales y directorios completos
 
 ## Requisitos
 
-- Compilador GCC
-- Entorno Linux / POSIX.
-
-Recomendado:
-
-- gcc >= 5.0 (con `-fopenmp`).
-- OMP_NUM_THREADS ajustable según el número de núcleos disponibles.
+- GCC con soporte OpenMP
+- GTK+ 3.0
+- pkg-config
 
 ## Compilación
 
-A continuación se muestra como se debería compilar el proyecto:
-
 ```bash
-gcc -O3 -fopenmp -march=native -o compressor *.c
+make
 ```
-
-Notas:
-
-- `-O3` activa optimizaciones para mejor rendimiento.
-- `-fopenmp` habilita el soporte de OpenMP.
-- `-march=native` (opcional) habilita instrucciones específicas de la CPU host.
 
 ## Uso
 
-La herramienta resultante suele aceptar al menos dos modos básicos: `compress` y `decompress`. Ejemplos (ajusta los nombres de binarios y rutas según tu proyecto):
-
-Comprimir un archivo:
+### Interfaz Gráfica
 
 ```bash
-./compressor compress archivo_entrada.bin archivo_salida.comp
+./build/file_compressor
 ```
+
+### Línea de Comandos
+
+```bash
+# Ayuda
+./build/file_compressor --help
+
+# Comprimir archivo
+./build/file_compressor -c input.txt output.w
+
+# Comprimir directorio
+./build/file_compressor -c mydirectory/ archive.w
+
+# Descomprimir
+./build/file_compressor -d archive.w extracted/
+```
+
 ---

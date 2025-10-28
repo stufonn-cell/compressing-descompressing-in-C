@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
 #include "file_manager.h"
 
 // Global widgets
@@ -297,8 +298,92 @@ static void activate(GtkApplication *app, gpointer user_data)
     gtk_widget_show_all(widgets->window);
 }
 
+// Print usage information
+static void print_usage(const char *program_name)
+{
+    printf("Usage: %s [OPTIONS]\n", program_name);
+    printf("File Compression/Decompression Tool\n\n");
+    printf("OPTIONS:\n");
+    printf("  -h, --help              Show this help message\n");
+    printf("  -c, --compress INPUT OUTPUT\n");
+    printf("                          Compress INPUT (file or directory) to OUTPUT file\n");
+    printf("  -d, --decompress INPUT OUTPUT\n");
+    printf("                          Decompress INPUT file to OUTPUT (file or directory)\n");
+    printf("  (no arguments)          Launch GUI mode\n\n");
+    printf("Examples:\n");
+    printf("  %s -c myfile.txt myfile.w          # Compress file\n", program_name);
+    printf("  %s -c mydirectory/ archive.w       # Compress directory\n", program_name);
+    printf("  %s -d archive.w extracted/         # Decompress to directory\n", program_name);
+    printf("  %s                                 # Launch GUI\n", program_name);
+}
+
+// CLI mode for compression
+static int cli_compress(const char *input, const char *output)
+{
+    printf("Compressing '%s' to '%s'...\n", input, output);
+
+    fm_status_t status = fm_compress(input, output);
+
+    if (status == FM_STATUS_OK)
+    {
+        printf("Compression completed successfully.\n");
+        return 0;
+    }
+    else
+    {
+        printf("Compression failed (error code: %d)\n", status);
+        return 1;
+    }
+}
+
+// CLI mode for decompression
+static int cli_decompress(const char *input, const char *output)
+{
+    printf("Decompressing '%s' to '%s'...\n", input, output);
+
+    fm_status_t status = fm_decompress(input, output);
+
+    if (status == FM_STATUS_OK)
+    {
+        printf("Decompression completed successfully.\n");
+        return 0;
+    }
+    else
+    {
+        printf("Decompression failed (error code: %d)\n", status);
+        return 1;
+    }
+}
+
 int main(int argc, char **argv)
 {
+    // Check if running in CLI mode
+    if (argc > 1)
+    {
+        // Parse command line arguments
+        if (argc == 2 && (strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0))
+        {
+            print_usage(argv[0]);
+            return 0;
+        }
+
+        if (argc == 4 && (strcmp(argv[1], "-c") == 0 || strcmp(argv[1], "--compress") == 0))
+        {
+            return cli_compress(argv[2], argv[3]);
+        }
+
+        if (argc == 4 && (strcmp(argv[1], "-d") == 0 || strcmp(argv[1], "--decompress") == 0))
+        {
+            return cli_decompress(argv[2], argv[3]);
+        }
+
+        // Invalid arguments
+        printf("Error: Invalid arguments\n\n");
+        print_usage(argv[0]);
+        return 1;
+    }
+
+    // No arguments provided, launch GUI mode
     GtkApplication *app;
     int status;
 
